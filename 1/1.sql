@@ -105,4 +105,9 @@ SELECT  first_name, last_name, max(result) over (partition by student_id )
 FROM exam_result er
          inner join user on user.id = er.student_id
  limit 5;
-
+ -- 9
+select last_name,  sum(result)/count(result) as avg
+from exam_result er
+         inner join user on user.id = er.student_id
+         limit 1
+-- 10
