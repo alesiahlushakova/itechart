@@ -9,21 +9,26 @@ drop table user;
 select * from student_result;
 select * from training_course;
 select * from exam;
+
+
 create table user(
-                      id int primary key,
+                      id int auto_increment primary key,
                       first_name nvarchar(50),
                       last_name nvarchar(50),
                       role enum('STUDENT', 'LECTURER')
 );
+
+
+
 create table training_course (
-                                 id int primary key,
+                                 id int auto_increment primary key,
                                  name nvarchar(50),
                                  teacher_id int,
                                  constraint training_course_fk foreign key(teacher_id) references user(id)
 );
 
 create table exam (
-                      id int primary key,
+                      id int auto_increment primary key,
                       date date,
                       teacher_id int,
                       training_course_id int,
@@ -32,9 +37,10 @@ create table exam (
 );
 
 
+
 create table student_result(
 
-                            student_id int  ,
+                            student_id   int auto_increment auto_increment  ,
                             result int,
                             date date,
                             exam_id int,
@@ -46,8 +52,9 @@ create table student_result(
 );
 
 
+
 create table exam_result(
-                            id int primary key,
+                            id int auto_increment primary key,
                             student_id int,
                             result int,
                             exam_id int,
@@ -58,56 +65,68 @@ create table exam_result(
 
 );
 
--- 1
-select first_name, last_name from user
+
+-- 1 Выбрать имена и фамилии студентов, успешно сдавших экзамен, упорядоченных по результату экзамена (отличники первые в результате)
+select  distinct first_name, last_name from user
 inner join exam_result er on user.id = er.student_id
 where role = 'STUDENT' and  result>2 order by result desc;
 
--- 2
+-- 2 Посчитать количество студентов, успешно сдавших экзамен на 4 и 5
 select count(*) from user
 inner join exam_result er on user.id = er.student_id
 where role = 'STUDENT' and  result=4 or result=5;
 
--- 3
+-- 3 Посчитать количество студентов, сдавших экзамен “автоматом” (нет записи в таблице exam_result но есть положительный результат в таблице student_result) 
 select count(*) from student_result sr
                         left join exam_result er on sr.student_id = er.student_id
           where er.student_id is null
 ;
--- 4
+-- 4 Посчитать средний балл студентов по предмету с наименованием “Системы управления базами данных” 
 select avg(result) as avg
 from student_result
     inner join training_course on student_result.training_course_id=training_course.id
 where training_course.name='Системы управления базами данных';
--- 5
+-- 5 Выбрать имена и фамилии студентов, не сдававших экзамен по предмету “Теория графов” (2 вида запроса)
 select first_name, last_name from user
 inner join student_result er on user.id = er.student_id
 inner  join training_course on er.training_course_id=training_course.id
 where role = 'STUDENT' and result<3 and   training_course.name='Теория графов';
 
--- 6
+-- 6 Выбрать идентификатор преподавателей, читающих лекции по больше чем по 2 предметам
 
 SELECT teacher_id
 FROM training_course
 GROUP BY teacher_id
-HAVING COUNT(teacher_id) > 1;
+HAVING COUNT(teacher_id) > 2;
 
 
--- 7
+-- 7 Выбрать идентификатор и фамилии студентов, пересдававших хотя бы 1 предмет (2 и более записи в exam_result)
 SELECT student_id, last_name
 FROM exam_result er
          inner join user on user.id = er.student_id
 GROUP BY student_id,role
 HAVING COUNT(student_id) > 1 and role='STUDENT';
 
--- 8
+-- 8 Вывести имена и фамилии 5 студентов с максимальными оценками
 
-SELECT  first_name, last_name, max(result) over (partition by student_id )
+
+ SELECT distinct  first_name, last_name, max(result) over (partition by student_id ) as max_mark
 FROM exam_result er
          inner join user on user.id = er.student_id
+         order by result desc
  limit 5;
- -- 9
-select last_name,  sum(result)/count(result) as avg
+
+ -- 9 Вывести фамилию преподавателя, у которого наилучшие результаты по его предметам
+select distinct last_name,  avg(result)  over (partition by teacher_id ) as avg
 from exam_result er
-         inner join user on user.id = er.student_id
+         inner join user on user.id = er.teacher_id
+         order by result desc
          limit 1
--- 10
+-- 10 Вывести успеваемость студентов по годам по предмету “Математическая статистика” 
+select first_name, last_name, result, EXTRACT(YEAR FROM date) as year
+from student_result er
+         inner join user on user.id = er.student_id
+        where where role = 'STUDENT' and training_course.name='Математическая статистика'
+         
+         
+
