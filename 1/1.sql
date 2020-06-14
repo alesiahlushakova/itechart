@@ -79,7 +79,7 @@ where role = 'STUDENT' and  result=4 or result=5;
 -- 3 Посчитать количество студентов, сдавших экзамен “автоматом” (нет записи в таблице exam_result но есть положительный результат в таблице student_result) 
 select count(*) from student_result sr
                         left join exam_result er on sr.student_id = er.student_id
-          where er.student_id is null
+          where er.student_id is null and er.exam_id is null
 ;
 -- 4 Посчитать средний балл студентов по предмету с наименованием “Системы управления базами данных” 
 select avg(result) as avg
