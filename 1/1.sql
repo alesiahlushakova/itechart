@@ -77,9 +77,10 @@ inner join exam_result er on user.id = er.student_id
 where role = 'STUDENT' and  result=4 or result=5;
 
 -- 3 Посчитать количество студентов, сдавших экзамен “автоматом” (нет записи в таблице exam_result но есть положительный результат в таблице student_result) 
-select count(*) from student_result sr
+select training_course_id,count(sr.student_id) from student_result sr
                         left join exam_result er on sr.student_id = er.student_id
           where er.student_id is null and er.exam_id is null
+group by training_course_id;
 ;
 -- 4 Посчитать средний балл студентов по предмету с наименованием “Системы управления базами данных” 
 select avg(result) as avg
@@ -89,8 +90,8 @@ where training_course.name='Системы управления базами д�
 -- 5 Выбрать имена и фамилии студентов, не сдававших экзамен по предмету “Теория графов” (2 вида запроса)
 select first_name, last_name from user
 inner join student_result er on user.id = er.student_id
-inner  join training_course on er.training_course_id=training_course.id
-where role = 'STUDENT' and result<3 and   training_course.name='Теория графов';
+left  join training_course on er.training_course_id=training_course.id
+where role = 'STUDENT'  and er.student_id is null and  training_course.name='Теория графов';
 
 -- 6 Выбрать идентификатор преподавателей, читающих лекции по больше чем по 2 предметам
 
@@ -108,13 +109,20 @@ GROUP BY student_id,role
 HAVING COUNT(student_id) > 1 and role='STUDENT';
 
 -- 8 Вывести имена и фамилии 5 студентов с максимальными оценками
-
+(максимальне оценки среди сдавших)
 
  SELECT distinct  first_name, last_name, max(result) over (partition by student_id ) as max_mark
 FROM exam_result er
          inner join user on user.id = er.student_id
          order by result desc
  limit 5;
+
+(макс. оценка= высшая оценка)
+select student.first_name, student.last_name
+from student JOIN student_result on student.id = student_result.student_id
+where student_result.result = 5
+group by student_id
+limit 5;
 
  -- 9 Вывести фамилию преподавателя, у которого наилучшие результаты по его предметам
 select distinct last_name,  avg(result)  over (partition by teacher_id ) as avg
