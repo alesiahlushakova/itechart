@@ -1,0 +1,50 @@
+* {
+  padding: 0;
+  margin: 0;
+}
+
+.jlab-row {
+  padding-bottom: 1em;
+  display: grid;
+  grid-gap: 1em;
+}
+
+#second-row {
+  grid-template-columns: repeat(12, 1fr);
+}
+
+
+
+#third-row {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+#first-row {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+
+.jlab-row > div {
+  padding: 1em;
+  text-align: center;
+}
+
+.jlab-row > div.jlab-cell-6 {
+  padding: 1em;
+}
+
+.jlab-row > div.jlab-cell-4 {
+  padding: 1em;
+}
+
+.jlab-row > div.jlab-cell-3 {
+  padding: 1em;
+}
+
+.jlab-row > div.jlab-cell-2 {
+  padding: 1em;
+}
+
+.jlab-row > div.jlab-cell-1 {
+  padding: 1em;
+}
