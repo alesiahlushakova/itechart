@@ -1,4 +1,4 @@
-package by.itechart.controller;
+package main.java.by.itechart.controller;
 
 import java.io.File;
 

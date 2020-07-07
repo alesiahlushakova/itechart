@@ -1,7 +1,12 @@
-package by.itechart.command;
+package main.java.by.itechart.command;
 
+import main.java.by.itechart.validator.ValidatorException;
+import org.apache.commons.fileupload.FileUploadException;
+
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 
 public interface Command {
@@ -20,5 +25,5 @@ public interface Command {
 
 
 
-    void execute(HttpServletRequest request, HttpServletResponse response);
+    void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException;
 }

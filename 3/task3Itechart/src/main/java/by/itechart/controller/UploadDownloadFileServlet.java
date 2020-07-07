@@ -1,8 +1,8 @@
-package by.itechart.controller;
+package main.java.by.itechart.controller;
 
-import by.itechart.command.Command;
-import by.itechart.command.CommandFactory;
-import by.itechart.command.CurrentJsp;
+import main.java.by.itechart.command.Command;
+import main.java.by.itechart.command.CommandFactory;
+import main.java.by.itechart.validator.ValidatorException;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
@@ -33,13 +33,16 @@ public class UploadDownloadFileServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        processRequest(request, response);
+
+            processRequest(request, response);
+
     }
 
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        processRequest(request, response);
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)   throws ServletException, IOException {
+            processRequest(request, response);
+
     }
 
     private void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

@@ -1,4 +1,4 @@
-package by.itechart.command;
+package main.java.by.itechart.command;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

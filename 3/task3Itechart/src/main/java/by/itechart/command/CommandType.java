@@ -1,4 +1,4 @@
-package by.itechart.command;
+package main.java.by.itechart.command;
 
 
 public enum CommandType {
